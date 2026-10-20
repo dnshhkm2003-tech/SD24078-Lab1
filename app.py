@@ -1,5 +1,11 @@
 
+import streamlit as st
 from collections import deque
+
+st.set_page_config(page_title="BFS and DFS", page_icon="🔎")
+
+st.title("BSD3513: AI Search Algorithms")
+st.write("Explore Breadth-First Search (BFS) and Depth-First Search (DFS).")
 
 graph = {
     "A": ["B", "D"],
@@ -43,5 +49,37 @@ def dfs(graph, start):
     visit(start, 0)
     return result
 
-print("BFS:", bfs(graph, "A"))
-print("DFS:", dfs(graph, "A"))
+st.subheader("Directed Graph")
+st.write("Starting node and connections:")
+st.json(graph)
+
+algorithm = st.selectbox(
+    "Choose an algorithm",
+    ["BFS", "DFS"]
+)
+
+start = st.selectbox(
+    "Choose starting node",
+    sorted(graph.keys())
+)
+
+if st.button("Run Search"):
+    if algorithm == "BFS":
+        result = bfs(graph, start)
+    else:
+        result = dfs(graph, start)
+
+    st.subheader("Traversal Order")
+    st.write(" → ".join(node for node, level in result))
+
+    st.subheader("Node Levels")
+    for node, level in result:
+        st.write(f"Node {node}: Level {level}")
+
+    st.subheader("Algorithm Complexity")
+    st.write("Time Complexity: O(V + E)")
+    st.write("Space Complexity: O(V)")
+
+    st.success("Search completed successfully!")
+
+st.caption("BSD3513 - Lab Report 1")
